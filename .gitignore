@@ -1,0 +1,15 @@
+*.egg-info/
+*.pyc
+*~
+.*.sw?
+.coverage
+.directory
+.env
+.idea
+.cache
+nohup.out
+.tox
+MANIFEST
+build/*
+dist/*
+venv/

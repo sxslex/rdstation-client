@@ -1,0 +1,8 @@
+{
+ "access_token": "access_token",
+ "client_id": "049bf881-bf0e-43e8-9e09-7ebe2972b8b0",
+ "client_secret": "952ec28d22414d9dbad97da9a19645d8",
+ "code": "7c94f5f3604e0d2a7f589ec1077eaefa",
+ "redirect_url": "https://contas.diariosassociados.com.br/api/v1/swg/log",
+ "refresh_token": "refresh_token"
+}
