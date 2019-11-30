@@ -4,15 +4,15 @@
 from setuptools import setup
 
 
-with open('README.md', 'r', 'utf-8') as f:
+with open('README.md') as f:
     readme = f.read()
 
 setup(
     name='rdstation-client',
-    version='0.0.1',
+    version='0.0.4',
     url='https://github.com/sxslex/rdstation-client',
     download_url=(
-        'https://github.com/sxslex/rdstation-client/archive/v0.0.1.tar.gz'
+        'https://github.com/sxslex/rdstation-client/archive/v0.0.4.tar.gz'
     ),
     author='SleX',
     author_email='sx.slex@gmail.com',

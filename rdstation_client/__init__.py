@@ -2,7 +2,7 @@
 # https://developers.rdstation.com/en/overview
 """Client for access API rdstation."""
 
-__version__ = '0.0.1'
+__version__ = '0.0.4'
 
 
 import requests
@@ -155,7 +155,7 @@ class RDStationClient:
             )
             if not self.console_input:
                 raise ExceptionRDStationClientCreateCode(msg)
-            self.code = str(input(MSG_ERROR + '\n Enter CODE: '))
+            self.code = str(input(msg + '\n Enter CODE: '))
             return self._create_token()
 
         data = _response.json()

@@ -1,6 +1,6 @@
 # RDStation-client
 
-[![Current version at PyPI](https://img.shields.io/badge/pypi-v0.0.1-orange.svg)](https://pypi.python.org/pypi/rdstation-client)
+[![Current version at PyPI](https://img.shields.io/badge/pypi-v0.0.4-orange.svg)](https://pypi.python.org/pypi/rdstation-client)
 [![Downloads per month on PyPI](https://img.shields.io/badge/download--lime.svg)](https://pypi.org/project/rdstation-client/)
 [![Supported Python Versions](https://img.shields.io/badge/pyhton-2.7,3.5,3.7+-blue.svg)]()
 [![Software status](https://img.shields.io/badge/status-stable-green.svg)]()
@@ -88,7 +88,7 @@ py.test --cov-report term-missing --cov=rdstation_client tests/ -v
 Use pep8
 
 ```bash
-pycodestyle rdstation_client
+pycodestyle rdstation_client tests
 ```
 
 [pypi-rdstation-client]: https://pypi.org/project/rdstation-client/
