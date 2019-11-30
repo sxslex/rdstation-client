@@ -3,6 +3,10 @@
 
 from setuptools import setup
 
+
+with open('README.md', 'r', 'utf-8') as f:
+    readme = f.read()
+
 setup(
     name='rdstation-client',
     version='0.0.1',
@@ -15,6 +19,8 @@ setup(
     description=(
         "Client for access API rdstation."
     ),
+    long_description=readme,
+    long_description_content_type='text/markdown',
     keywords=['rdstation', 'api', 'client', 'rd'],
     packages=['rdstation_client'],
     classifiers=[
@@ -27,6 +33,7 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
 )
