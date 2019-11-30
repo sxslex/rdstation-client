@@ -69,7 +69,9 @@ Development
 Use py.test
 
     $ pip install -r requirements-development.txt
+
     $ py.test --cov-report term-missing --cov=rdstation_client tests/ -v
+
     $ py.test --cov-report term-missing --cov=rdstation_client --cov-report html tests/ -v
 
 
