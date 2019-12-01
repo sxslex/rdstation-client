@@ -1,6 +1,29 @@
 [run]
-source=rdstation_client
+source =
+    rdstation_client
+
+omit =
+    *urllib3/packages/*
+    *urllib3/contrib/appengine.py
+    *urllib3/contrib/ntlmpool.py
+    *urllib3/contrib/pyopenssl.py
+    *urllib3/contrib/securetransport.py
+    *urllib3/contrib/_securetransport/*
+
+[paths]
+source =
+    rdstation_client
+    .tox/*/lib/python*/site-packages/rdstation_client
+    .tox\*\Lib\site-packages\rdstation_client
+    .tox/pypy*/site-packages/rdstation_client
 
 [report]
-fail_under = 90
-show_missing = True
+exclude_lines =
+    except ImportError:
+    pass
+    import
+    raise
+    .* # Platform-specific.*
+    .*:.* # Python \d.*
+    .* # Abstract
+    .* # Defensive:
