@@ -12,4 +12,5 @@ env:
 script:
   - py.test --cov=rdstation_client tests/
   - pycodestyle rdstation_client tests
-  - codecov -t a9ecca9b-c84a-45c4-a032-d4208cf10ad
+  - codecov -t "a9ecca9b-c84a-45c4-a032-d4208cf10ade"
+  - codecov
