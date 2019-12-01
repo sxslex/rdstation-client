@@ -1,5 +1,5 @@
 [run]
-include=rdstation_client/*
+source=rdstation_client
 
 [report]
 fail_under = 90

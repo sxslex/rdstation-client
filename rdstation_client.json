@@ -1,8 +1,0 @@
-{
- "access_token": "access_token",
- "client_id": "client_id",
- "client_secret": "client_secret",
- "code": "code",
- "redirect_url": "https://appname.org/auth/callback ",
- "refresh_token": "refresh_token"
-}
