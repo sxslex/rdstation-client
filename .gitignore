@@ -20,3 +20,4 @@ tests/rdstation_client.json
 tests/_rdstation_client.json
 coverage.xml
 builder.txt
+builder.sh

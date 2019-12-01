@@ -1,3 +1,6 @@
+[run]
+include=rdstation_client/*
+
 [report]
 fail_under = 90
 show_missing = True
