@@ -1,10 +1,10 @@
 # RDStation-client
 
-[![Current version at PyPI](https://img.shields.io/badge/pypi-v0.0.4-amber.svg)](https://pypi.python.org/pypi/rdstation-client)
+[![Current version at PyPI](https://img.shields.io/badge/pypi-v0.0.4-yellowgreen.svg)](https://pypi.python.org/pypi/rdstation-client)
 [![Downloads current version](https://img.shields.io/badge/download-v0.0.4-olympic.svg)](https://github.com/sxslex/rdstation-client/archive/v0.0.4.tar.gz)
-[![Supported Python Versions](https://img.shields.io/badge/pyhton-2.7%20%7C%203.5%20%7C%203.6%20%7C%203.7-blue.svg)]()
+[![Supported Python Versions](https://img.shields.io/badge/pyhton-2.7%20%7C%203.5%20%7C%203.6%20%7C%203.7-blue.svg)](https://img.shields.io/badge/pyhton-2.7%20%7C%203.5%20%7C%203.6%20%7C%203.7-blue.svg)
 [![Build Status](https://travis-ci.org/sxslex/rdstation-client.svg?branch=master)](https://travis-ci.org/sxslex/rdstation-client)
-[![License: LGPLv3](https://img.shields.io/pypi/l/rows.svg)](https://raw.githubusercontent.com/sxslex/rdstation-client/master/LICENSE)
+[![License: LGPLv3](https://img.shields.io/badge/license-GNU%203-red.svg)](https://github.com/sxslex/rdstation-client/blob/master/LICENSE)
 
 Client for access API rdstation.
 
