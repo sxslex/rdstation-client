@@ -2,7 +2,7 @@
 # https://developers.rdstation.com/en/overview
 """Client for access API rdstation."""
 
-__version__ = '0.0.7'
+__version__ = '0.0.8'
 
 
 import requests
