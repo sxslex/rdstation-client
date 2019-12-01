@@ -4,7 +4,7 @@
 [![Downloads current version](https://img.shields.io/badge/download-v0.0.5-olympic.svg)](https://github.com/sxslex/rdstation-client/archive/v0.0.5.tar.gz)
 [![Supported Python Versions](https://img.shields.io/badge/pyhton-2.7%20%7C%203.5%20%7C%203.6%20%7C%203.7-blue.svg)](https://img.shields.io/badge/pyhton-2.7%20%7C%203.5%20%7C%203.6%20%7C%203.7-blue.svg)
 [![Build Status](https://travis-ci.org/sxslex/rdstation-client.svg?branch=master)](https://travis-ci.org/sxslex/rdstation-client)
-[![License: LGPLv3](https://img.shields.io/badge/license-GNU%203-red.svg)](https://github.com/sxslex/rdstation-client/blob/master/LICENSE)
+[![License: LGPLv3](https://img.shields.io/badge/license-LGPLv3+-red.svg)](https://github.com/sxslex/rdstation-client/blob/master/LICENSE)
 
 Client for access API rdstation.
 
@@ -82,7 +82,7 @@ pip install -r requirements-development.txt
 Use py.test
 
 ```bash
-py.test --cov-report term-missing --cov=rdstation_client tests/ -v
+py.test --verbose --assert=plain --color=yes --cov-report=term-missing --cov=rdstation_client tests/
 ```
 
 Use pep8
