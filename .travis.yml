@@ -13,4 +13,4 @@ script:
   - py.test --cov=rdstation_client tests/
   - pycodestyle rdstation_client tests
 after_success:
-  - codecov
+  - codecov -t a9ecca9b-c84a-45c4-a032-d4208cf10ad
