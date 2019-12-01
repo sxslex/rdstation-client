@@ -52,16 +52,10 @@ def test_exception_rdstation_client_response_2():
                 'exists',
                 'error_type': 'TAKEN'}
     }))
-    # pprint.pprint(str(obj))
-    assert str(obj) == (
-        'ExceptionRDStationClientResponse("a field with'
-        ' \'api_identifier\' = \'cf_my_custom_field\' '
-        'already exists", {\'errors\': {\'error_message'
-        '\': "a field with \'api_identifier\' = "\n    '
-        '                         "\'cf_my_custom_field'
-        '\' already exists",\n'
-        "            'error_type': 'TAKEN'}})"
-    )
+    sobj = str(obj)
+    assert 'ExceptionRDStationClientResponse(' in sobj
+    assert 'a field with' in sobj
+    assert 'TAKEN' in sobj
     assert isinstance(
         obj.response_obj['errors']['error_message'],
         str
@@ -70,9 +64,9 @@ def test_exception_rdstation_client_response_2():
 
 def test_exception_rdstation_client_response_3():
     obj = ExceptionRDStationClientResponse('Basic ERRORS')
-    assert str(obj) == (
-        'ExceptionRDStationClientResponse("Basic ERRORS", {})'
-    )
+    sobj = str(obj)
+    assert 'ExceptionRDStationClientResponse(' in sobj
+    assert 'Basic ERRORS' in sobj
     assert isinstance(obj.response_obj, dict)
     assert not bool(obj.response_obj)
 

@@ -9,6 +9,12 @@ import requests
 import pprint
 import json
 
+try:
+    FileNotFoundError
+except NameError:
+    FileNotFoundError = IOError
+
+
 MSG_FILE_CONF = (
     'Please import the file path "file_auth"'
 )
@@ -27,7 +33,22 @@ MSG_CREATE_TOKEN = (
     '&redirect_url=%(redirect_url)s'
 )
 
-# 'Field $(name)s is empty.\n'
+
+def encode_all_unicode(obj):
+    if hasattr(obj, 'encode'):
+        try:
+            isinstance(obj, unicode)
+            return obj.encode('utf-8')
+        except Exception:
+            return obj
+    if isinstance(obj, dict):
+        new = {}
+        for key in obj.keys():
+            new[encode_all_unicode(key)] = encode_all_unicode(obj[key])
+        return new
+    if isinstance(obj, list):
+        return [encode_all_unicode(item) for item in obj]
+    return obj
 
 
 class ExceptionRDStationClient(Exception):
@@ -43,7 +64,7 @@ class ExceptionRDStationClientResponse(ExceptionRDStationClient):
         self.response_obj = response_obj or {}
         self.message = message
         try:
-            self.response_obj = json.loads(message)
+            self.response_obj = encode_all_unicode(json.loads(message))
             errors = self.response_obj['errors']
             error_message = errors.get('error_message')
             if error_message:
@@ -56,13 +77,17 @@ class ExceptionRDStationClientResponse(ExceptionRDStationClient):
                     )
         except Exception:
             pass
-        super().__init__(self.message)
+        try:
+            super().__init__(self.message)
+        except Exception:
+            super(self.__class__, self).__init__(self.message)
 
     def __repr__(self):
-        return 'ExceptionRDStationClientResponse("%s", %s)' % (
+        return 'ExceptionRDStationClientResponse(%s, %s)' % (
             (
-                self.message if isinstance(self.message, str)
-                else '\n'.join(self.message)
+                '"%s"' % ('\n'.join(self.message))
+                if isinstance(self.message, list)
+                else pprint.pformat(self.message)
             ),
             pprint.pformat(self.response_obj)
         )
@@ -158,7 +183,7 @@ class RDStationClient:
             self.code = str(input(msg + '\n Enter CODE: '))
             return self._create_token()
 
-        data = _response.json()
+        data = encode_all_unicode(_response.json())
         self.access_token = data['access_token']
         self.refresh_token = data['refresh_token']
         self._saving_params()
@@ -174,7 +199,7 @@ class RDStationClient:
         if response.status_code == 204:
             return {}
         if int(response.status_code / 100) == 2:
-            return response.json()
+            return encode_all_unicode(response.json())
         raise ExceptionRDStationClientResponse(
             response.content.decode()
         )
@@ -191,7 +216,7 @@ class RDStationClient:
             try:
                 pprint.pprint(kwargs)
                 print(response.status_code)
-                pprint.pprint(response.json())
+                pprint.pprint(encode_all_unicode(response.json()))
             except Exception:
                 pass
         if response.status_code in (401, 402, 403, 404):
