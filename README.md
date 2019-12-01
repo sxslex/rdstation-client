@@ -3,7 +3,7 @@
 [![Current version at PyPI](https://img.shields.io/badge/pypi-v0.0.4-orange.svg)](https://pypi.python.org/pypi/rdstation-client)
 [![Downloads per month on PyPI](https://img.shields.io/badge/download--lime.svg)](https://pypi.org/project/rdstation-client/)
 [![Supported Python Versions](https://img.shields.io/badge/pyhton-2.7,3.5,3.7+-blue.svg)]()
-[![Software status](https://img.shields.io/badge/status-stable-green.svg)]()
+[![Build Status](https://travis-ci.org/sxslex/rdstation-client.svg?branch=master)](https://travis-ci.org/sxslex/rdstation-client)
 [![License: LGPLv3](https://img.shields.io/badge/license--blue.svg)]()
 
 Client for access API rdstation.
