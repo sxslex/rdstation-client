@@ -13,3 +13,12 @@ MANIFEST
 build/*
 dist/*
 venv/
+venv2.7/
+htmlcov/
+tests/test_file_auth.json
+tests/rdstation_client.json
+tests/_rdstation_client.json
+coverage.xml
+builder.txt
+builder.sh
+test_file_auth.json

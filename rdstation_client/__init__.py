@@ -2,12 +2,24 @@
 # https://developers.rdstation.com/en/overview
 """Client for access API rdstation."""
 
-__version__ = '0.0.1'
+__version__ = '0.0.9'
 
-
+from .utils import encode_all_unicode
+from .errors import (
+    ExceptionRDStationClient,
+    ExceptionRDStationClientCreateCode,
+    ExceptionRDStationClientResponse
+)
 import requests
 import pprint
 import json
+
+
+# try:
+#     FileNotFoundError
+# except NameError:
+#     FileNotFoundError = IOError
+
 
 MSG_FILE_CONF = (
     'Please import the file path "file_auth"'
@@ -16,59 +28,18 @@ MSG_FILE_CONF = (
 MSG_ERROR = (
     'Please fill in the configuration file for API access '
     'with the required data.\n'
-    'For more details on how to have these values visit the link:'
+    'For more details on how to have these values visit the link: '
     'https://developers.rdstation.com/en/overview'
 )
 MSG_CREATE_TOKEN = (
     'Visit the link below with the RDStation account '
-    'to get the CODE that will be in the URL.'
+    'to get the CODE that will be in the URL. '
     'https://app.rdstation.com.br/api/'
     'platform/auth?client_id=%(client_id)s'
     '&redirect_url=%(redirect_url)s'
 )
 
-# 'Field $(name)s is empty.\n'
-
-
-class ExceptionRDStationClient(Exception):
-    pass
-
-
-class ExceptionRDStationClientCreateCode(ExceptionRDStationClient):
-    pass
-
-
-class ExceptionRDStationClientResponse(ExceptionRDStationClient):
-    def __init__(self, message, response_obj=None):
-        self.response_obj = response_obj or {}
-        self.message = message
-        try:
-            self.response_obj = json.loads(message)
-            errors = self.response_obj['errors']
-            error_message = errors.get('error_message')
-            if error_message:
-                self.message = error_message
-            api_identifier = errors.get('api_identifier')
-            if api_identifier:
-                if isinstance(api_identifier, list):
-                    self.message = '\n'.join(
-                        [i.get('error_message') for i in api_identifier]
-                    )
-        except Exception:
-            pass
-        super().__init__(self.message)
-
-    def __repr__(self):
-        return 'ExceptionRDStationClientResponse("%s", %s)' % (
-            (
-                self.message if isinstance(self.message, str)
-                else '\n'.join(self.message)
-            ),
-            pprint.pformat(self.response_obj)
-        )
-
-    def __str__(self):
-        return self.__repr__()
+my_input = input
 
 
 class RDStationClient:
@@ -77,7 +48,7 @@ class RDStationClient:
         self,
         file_auth=None,
         log=False,
-        console=False
+        console_input=True
     ):
         if not file_auth:
             raise ExceptionRDStationClient(MSG_FILE_CONF + '\n' + MSG_ERROR)
@@ -89,7 +60,7 @@ class RDStationClient:
         self.access_token = None
         self.refresh_token = None
         self.redirect_url = None
-        self.console = console
+        self.console_input = console_input
 
     def _saving_params(self):
         f = open(self.file_auth, 'w')
@@ -114,17 +85,17 @@ class RDStationClient:
             self.refresh_token = params.get('refresh_token')
             self.redirect_url = params.get('redirect_url')
             f.close()
-        except FileNotFoundError:
+        except IOError:
             self.client_id = 'client_id'
             self.client_secret = 'client_secret'
             self.code = 'code'
             self.access_token = 'access_token'
             self.refresh_token = 'refresh_token'
-            self.redirect_url = 'https://appname.org/auth/callback '
+            self.redirect_url = 'https://appname.org/auth/callback'
             self._saving_params()
             raise ExceptionRDStationClient(MSG_ERROR)
 
-    def _create_token(self):
+    def _create_token(self, deep=False):
         headers = {
             'Content-Type': 'application/json',
         }
@@ -143,22 +114,20 @@ class RDStationClient:
         )
         if self.log:
             print('POST /auth/token')
-            try:
-                pprint.pprint(params)
-                pprint.pprint(_response.json())
-            except Exception:
-                pass
+            pprint.pprint(params)
+            pprint.pprint(_response.json())
         if _response.status_code != 200:
             if self.refresh_token:
                 self.refresh_token = None
                 return self._create_token()
-            raise ExceptionRDStationClientCreateCode(
-                MSG_ERROR + '\n' +
-                MSG_CREATE_TOKEN % dict(
-                    client_id=self.client_id, redirect_url=self.redirect_url
-                )
+            msg = MSG_CREATE_TOKEN % dict(
+                client_id=self.client_id, redirect_url=self.redirect_url
             )
-        data = _response.json()
+            if not self.console_input or deep:
+                raise ExceptionRDStationClientCreateCode(msg)
+            self.code = str(my_input(msg + '\n Enter CODE: '))
+            return self._create_token(deep=True)
+        data = encode_all_unicode(_response.json())
         self.access_token = data['access_token']
         self.refresh_token = data['refresh_token']
         self._saving_params()
@@ -174,7 +143,7 @@ class RDStationClient:
         if response.status_code == 204:
             return {}
         if int(response.status_code / 100) == 2:
-            return response.json()
+            return encode_all_unicode(response.json())
         raise ExceptionRDStationClientResponse(
             response.content.decode()
         )
@@ -191,7 +160,7 @@ class RDStationClient:
             try:
                 pprint.pprint(kwargs)
                 print(response.status_code)
-                pprint.pprint(response.json())
+                pprint.pprint(encode_all_unicode(response.json()))
             except Exception:
                 pass
         if response.status_code in (401, 402, 403, 404):
@@ -202,21 +171,21 @@ class RDStationClient:
             response = requests.request(method, url, **kwargs)
         return response
 
-    def _get(self, uri=''):
+    def _get(self, uri):
         response = self._request(
             'get',
             'https://api.rd.services/%s' % uri
         )
         return self._get_json_response_200s(response)
 
-    def _delete(self, uri=''):
+    def _delete(self, uri):
         response = self._request(
             'delete',
             'https://api.rd.services/%s' % uri
         )
         return self._get_json_response_200s(response)
 
-    def _patch(self, uri='', data=None):
+    def _patch(self, uri, data=None):
         response = self._request(
             'patch',
             'https://api.rd.services/%s' % uri,
@@ -224,7 +193,7 @@ class RDStationClient:
         )
         return self._get_json_response_200s(response)
 
-    def _post(self, uri='', data=None):
+    def _post(self, uri, data=None):
         response = self._request(
             'post',
             'https://api.rd.services/%s' % uri,
@@ -572,16 +541,3 @@ class RDStationClient:
             'platform/events',
             event
         )
-
-
-# def configure():
-#     client_rds = RDStationClient(
-#         file_auth='rdstation_client.json',
-#         log=True,
-#         console=True
-#     )
-#     pprint.pprint(client_rds.account_info())
-
-#
-# if __name__ == '__main__':
-#     configure()

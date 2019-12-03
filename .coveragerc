@@ -1,0 +1,15 @@
+[run]
+source =
+    rdstation_client
+
+[paths]
+source =
+    rdstation_client
+    .tox/*/lib/python*/site-packages/rdstation_client
+    .tox\*\Lib\site-packages\rdstation_client
+    .tox/pypy*/site-packages/rdstation_client
+
+[report]
+exclude_lines =
+		except NameError:
+

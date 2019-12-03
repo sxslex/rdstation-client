@@ -7,6 +7,18 @@ import pytest
 @pytest.yield_fixture()
 def mock_api():
     with requests_mock.Mocker() as m:
+        m.get(
+            'https://httpstatuses.com/401',
+            status_code=401,
+            json={
+                'errors': {
+                        'error_message': 'a field with '
+                        "'api_identifier' = "
+                        "'cf_my_custom_field' already "
+                        'exists',
+                        'error_type': 'TAKEN'}
+            }
+        )
         m.post(
             'https://api.rd.services/auth/token',
             status_code=200,
@@ -30,7 +42,8 @@ def mock_api():
             }
         )
         m.get(
-            'https://api.rd.services/platform/contacts/email:sx.slex@gmail.com',
+            'https://api.rd.services/platform/contacts/'
+            'email:sx.slex@gmail.com',
             status_code=200,
             json={
                 "name": "RD Station Developer",
