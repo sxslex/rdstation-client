@@ -12,11 +12,11 @@ def mock_api():
             status_code=401,
             json={
                 'errors': {
-                        'error_message': 'a field with '
-                        "'api_identifier' = "
-                        "'cf_my_custom_field' already "
-                        'exists',
-                        'error_type': 'TAKEN'}
+                    'error_message': 'a field with '
+                    "'api_identifier' = "
+                    "'cf_my_custom_field' already "
+                    'exists',
+                    'error_type': 'TAKEN'}
             }
         )
         m.post(
@@ -198,7 +198,7 @@ def mock_api():
             'https://api.rd.services/platform/contacts/fields',
             status_code=201,
             json={
-              "uuid": "fdeba6ec-f1cf-4b13-b2ea-e93d47c0d828"
+                "uuid": "fdeba6ec-f1cf-4b13-b2ea-e93d47c0d828"
             }
         )
         m.patch(
@@ -219,4 +219,57 @@ def mock_api():
             status_code=200,
             json={'event_uuid': 'a22676ca-9f9c-48f7-91f1-61c4fd8b24d5'}
         )
+        m.get(
+            'https://api.rd.services/platform/contacts/'
+            'email:contact@example.com'
+            '/funnels/default',
+            status_code=200,
+            json={
+                "lifecycle_stage": "Lead",
+                "opportunity": False,
+                "contact_owner_email": "",
+                "fit": 60,
+                "interest": 10,
+            }
+        )
+        m.get(
+            'https://api.rd.services/platform/contacts/'
+            'uuid:b20da947-fbfd-4f0f-b338-fd08147d3842'
+            '/funnels/default',
+            status_code=200,
+            json={
+                "lifecycle_stage": "Lead",
+                "opportunity": False,
+                "contact_owner_email": "",
+                "fit": 60,
+                "interest": 10,
+            }
+        )
+        m.patch(
+            'https://api.rd.services/platform/contacts/'
+            'email:contact@example.com'
+            '/funnels/default',
+            status_code=200,
+            json={
+                "lifecycle_stage": "Qualified Lead",
+                "opportunity": True,
+                "contact_owner_email": "",
+                "fit": 60,
+                "interest": 10,
+            }
+        )
+        m.patch(
+            'https://api.rd.services/platform/contacts/'
+            'uuid:b20da947-fbfd-4f0f-b338-fd08147d3842'
+            '/funnels/default',
+            status_code=200,
+            json={
+                "lifecycle_stage": "Qualified Lead",
+                "opportunity": True,
+                "contact_owner_email": "",
+                "fit": 60,
+                "interest": 10,
+            }
+        )
+
         yield m

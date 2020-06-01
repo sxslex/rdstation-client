@@ -207,7 +207,7 @@ class RDStationClient:
         Available methods
         Returns the account name from your RD Station Marketing account.
         Vide: https://developers.rdstation.com/pt-BR/reference/account_infos
-            #get_account_info
+            # get_account_info
         :return: dict
             {"name": "Account Name"}
         :Example:
@@ -222,7 +222,7 @@ class RDStationClient:
         Returns the RD Station Marketing tracking code so it can be embedded
             on websites or CMS.
         Vide: https://developers.rdstation.com/en/reference/account_infos
-            #get_tracking_code
+            # get_tracking_code
         :return: dict
             {
               "path": "https://d335luupugsy2.cloudfront.net/js/loader-s"
@@ -340,7 +340,83 @@ class RDStationClient:
             contact
         )
 
-    # TODO: Funnels
+    # Funnels
+
+    def funnels_get(self, contact, funnel_name="default"):
+        """
+        Returns a list of Funnels associated to the given contact.
+        Currently only a single funnel called default is supported.
+
+        See: https://developers.rdstation.com/en/reference/contacts/funnels#methodGetByUuidDetails
+        #methodGetByEmailDetails
+        and https://developers.rdstation.com/en/reference/contacts/funnels
+        :return: dict
+            {
+                "lifecycle_stage": "Lead",
+                "opportunity": false,
+                "contact_owner_email": "",
+                "fit": 60,
+                "interest": 10
+            }
+        :Example:
+            rdsc = RDStationClient('/home/var/rdstation_client.json')
+            print(rdsc.funnels_get({'email': 'contact@email.com'}, 'default'))
+            rdsc = RDStationClient('/home/var/rdstation_client.json')
+            print(rdsc.funnels_get(
+                {'uuid': 'b20da947-fbfd-4f0f-b338-fd08147d3842'}, 'default'))
+        """
+        email = None
+        uuid = None
+
+        if 'uuid' in contact:
+            uuid = contact['uuid']
+        else:
+            email = contact['email']
+
+        return self._get(
+            'platform/contacts/' +
+            (('email:%s' % email if email else ('uuid:%s' %
+                                                uuid)) + ("/funnels/%s" % funnel_name))
+        )
+
+    def funnels_put(self, contact = {'lifecycle_stage': 'Lead', 'opportunity': False, 'contact_owner_email': ''}, funnel_name="default"):
+        """
+        Updates the funnel information about the current contact.
+        See: https://developers.rdstation.com/en/reference/contacts/funnels#methodPatchDetails
+        :return: dict
+            {
+                "lifecycle_stage": "Qualified Lead",
+                "opportunity": true,
+                "contact_owner_email": "",
+                "fit": 60,
+                "interest": 10,
+            }
+        :Example:
+            rdsc = RDStationClient('/home/var/rdstation_client.json')
+            rdsc.funnels_put({
+                # either email or uuid can be used
+                'email': 'contact@example.com',
+                'lifecycle_stage': 'Qualified Lead',
+                'opportunity': True,
+                'contact_owner_email': ''
+            })
+        """
+
+        email = None
+        uuid = None
+
+        if 'uuid' in contact:
+            uuid = contact['uuid']
+        else:
+            email = contact['email']
+
+        return self._patch(
+            'platform/contacts/' +
+            (('email:%s' % email if email else ('uuid:%s' %
+                                                uuid)) + ("/funnels/%s" % funnel_name)),
+            contact
+        )
+
 
     # Fields
 
