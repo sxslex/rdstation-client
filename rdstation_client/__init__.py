@@ -348,8 +348,7 @@ class RDStationClient:
         Currently only a single funnel called default is supported.
 
         See: https://developers.rdstation.com/en/reference/contacts/funnels#methodGetByUuidDetails
-        #methodGetByEmailDetails
-        and https://developers.rdstation.com/en/reference/contacts/funnels
+        and https://developers.rdstation.com/en/reference/contacts/funnels#methodGetByEmailDetails
         :return: dict
             {
                 "lifecycle_stage": "Lead",
@@ -379,7 +378,10 @@ class RDStationClient:
                                                 uuid)) + ("/funnels/%s" % funnel_name))
         )
 
-    def funnels_put(self, contact = {'lifecycle_stage': 'Lead', 'opportunity': False, 'contact_owner_email': ''}, funnel_name="default"):
+    def funnels_put(self,
+                    contact={'lifecycle_stage': 'Lead',
+                             'opportunity': False, 'contact_owner_email': ''},
+                    funnel_name="default"):
         """
         Updates the funnel information about the current contact.
         See: https://developers.rdstation.com/en/reference/contacts/funnels#methodPatchDetails
@@ -416,7 +418,6 @@ class RDStationClient:
                                                 uuid)) + ("/funnels/%s" % funnel_name)),
             contact
         )
-
 
     # Fields
 

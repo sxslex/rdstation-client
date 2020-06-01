@@ -317,6 +317,7 @@ def test_funnels_get_by_email(mock_api):
     resp = rdc.funnels_get(contact, "default")
     assert isinstance(resp, dict)
 
+
 def test_funnels_put_by_email(mock_api):
     rdc = _create_rdc()  # 'rdstation_client.json'
     resp = rdc.funnels_put({
@@ -327,6 +328,7 @@ def test_funnels_put_by_email(mock_api):
     })
     assert isinstance(resp, dict)
 
+
 def test_funnels_put_by_uuid(mock_api):
     rdc = _create_rdc()  # 'rdstation_client.json'
     resp = rdc.funnels_put({
@@ -336,7 +338,6 @@ def test_funnels_put_by_uuid(mock_api):
         'contact_owner_email': ''
     })
     assert isinstance(resp, dict)
-
 
 
 # # @requests_mock.mock()
