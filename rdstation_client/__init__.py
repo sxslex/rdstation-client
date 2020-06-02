@@ -201,6 +201,14 @@ class RDStationClient:
         )
         return self._get_json_response_200s(response)
 
+    def _put(self, uri, data=None):
+        response = self._request(
+            'put',
+            'https://api.rd.services/%s' % uri,
+            data=json.dumps(data) if data else None
+        )
+        return self._get_json_response_200s(response)
+
     # Available methods
     def account_info_get(self):
         """
@@ -412,7 +420,7 @@ class RDStationClient:
         else:
             email = contact['email']
 
-        return self._patch(
+        return self._put(
             'platform/contacts/' +
             (('email:%s' % email if email else ('uuid:%s' %
                                                 uuid)) + ("/funnels/%s" % funnel_name)),

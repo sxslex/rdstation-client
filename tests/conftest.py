@@ -245,7 +245,7 @@ def mock_api():
                 "interest": 10,
             }
         )
-        m.patch(
+        m.put(
             'https://api.rd.services/platform/contacts/'
             'email:contact@example.com'
             '/funnels/default',
@@ -258,7 +258,7 @@ def mock_api():
                 "interest": 10,
             }
         )
-        m.patch(
+        m.put(
             'https://api.rd.services/platform/contacts/'
             'uuid:b20da947-fbfd-4f0f-b338-fd08147d3842'
             '/funnels/default',
