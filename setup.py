@@ -9,10 +9,10 @@ with open('README.md') as f:
 
 setup(
     name='rdstation-client',
-    version='0.0.9',
+    version='0.0.10',
     url='https://github.com/sxslex/rdstation-client',
     download_url=(
-        'https://github.com/sxslex/rdstation-client/archive/v0.0.9.tar.gz'
+        'https://github.com/sxslex/rdstation-client/archive/v0.0.10.tar.gz'
     ),
     author='SleX',
     author_email='sx.slex@gmail.com',

@@ -2,7 +2,7 @@
 # https://developers.rdstation.com/en/overview
 """Client for access API rdstation."""
 
-__version__ = '0.0.9'
+__version__ = '0.0.10'
 
 from .utils import encode_all_unicode
 from .errors import (
