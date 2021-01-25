@@ -342,8 +342,8 @@ class RDStationClient:
             email = contact.pop('email')
         return self._patch(
             'platform/contacts/' + (
-                ('email:%s' % email) if email
-                else ('uuid:%s' % uuid)
+                'email:%s' % email if email
+                else 'uuid:%s' % uuid
             ),
             contact
         )
@@ -383,10 +383,13 @@ class RDStationClient:
             email = contact['email']
 
         return self._get(
-            'platform/contacts/' +
-            (('email:%s' % email if email else (
-                'uuid:%s' % uuid
-            )) + ('/funnels/%s' % funnel_name))
+            'platform/contacts/' + (
+                (
+                    'email:%s' % email if email else (
+                        'uuid:%s' % uuid
+                    )
+                ) + ('/funnels/%s' % funnel_name)
+            )
         )
 
     def funnels_put(
