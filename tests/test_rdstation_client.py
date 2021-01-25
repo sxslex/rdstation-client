@@ -301,6 +301,45 @@ def test_events_post(mock_api):  # mock_api
     assert isinstance(resp, dict)
     assert isinstance(resp['event_uuid'], str)
 
+
+def test_funnels_get_by_uuid(mock_api):
+    rdc = _create_rdc()  # 'rdstation_client.json'
+    contact = rdc.contacts_get_by_uuid("b20da947-fbfd-4f0f-b338-fd08147d3842")
+    contact.pop('email')
+    resp = rdc.funnels_get(contact, "default")
+    assert isinstance(resp, dict)
+
+
+def test_funnels_get_by_email(mock_api):
+    rdc = _create_rdc()  # 'rdstation_client.json'
+    contact = rdc.contacts_get_by_email('contact@example.com')
+    contact.pop('uuid')
+    resp = rdc.funnels_get(contact, "default")
+    assert isinstance(resp, dict)
+
+
+def test_funnels_put_by_email(mock_api):
+    rdc = _create_rdc()  # 'rdstation_client.json'
+    resp = rdc.funnels_put({
+        'email': 'contact@example.com',
+        'lifecycle_stage': 'Qualified Lead',
+        'opportunity': True,
+        'contact_owner_email': ''
+    })
+    assert isinstance(resp, dict)
+
+
+def test_funnels_put_by_uuid(mock_api):
+    rdc = _create_rdc()  # 'rdstation_client.json'
+    resp = rdc.funnels_put({
+        'uuid': 'b20da947-fbfd-4f0f-b338-fd08147d3842',
+        'lifecycle_stage': 'Qualified Lead',
+        'opportunity': True,
+        'contact_owner_email': ''
+    })
+    assert isinstance(resp, dict)
+
+
 # # @requests_mock.mock()
 # def test_contacts_patch(m):
 #     # m.get('http://test.com', text='data')
