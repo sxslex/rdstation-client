@@ -14,20 +14,25 @@ import requests
 import pprint
 import json
 
-
 # try:
 #     FileNotFoundError
 # except NameError:
 #     FileNotFoundError = IOError
 
 
-MSG_FILE_CONF = (
-    'Please import the file path "file_auth"'
+MSG_AUTH_CONFIG = (
+    'Please import the file path "file_auth" or '
+    'provide enough authentication parameters'
 )
 
 MSG_ERROR = (
     'Please fill in the configuration file for API access '
-    'with the required data.\n'
+    'with the required data or provide them as arguments to RDStationClient.\n'
+    'These combinations of arguments will work:\n'
+    '   A) client_id, client_secret, refresh_token\n'
+    '   B) client_id, client_secret, access_token, refresh_token\n'
+    '   C) client_id, client_secret, access_token, code\n'
+    '   D) client_id, client_secret, code\n'
     'For more details on how to have these values visit the link: '
     'https://developers.rdstation.com/en/overview'
 )
@@ -45,22 +50,38 @@ my_input = input
 class RDStationClient:
 
     def __init__(
-        self,
-        file_auth=None,
-        log=False,
-        console_input=True
+            self,
+            file_auth=None,
+            log=False,
+            console_input=True,
+            client_id=None,
+            client_secret=None,
+            access_token=None,
+            refresh_token=None,
+            code=None,
+            redirect_url=None
     ):
-        if not file_auth:
-            raise ExceptionRDStationClient(MSG_FILE_CONF + '\n' + MSG_ERROR)
         self.file_auth = file_auth
         self.log = log
-        self.client_id = None
-        self.client_secret = None
-        self.code = None
-        self.access_token = None
-        self.refresh_token = None
-        self.redirect_url = None
         self.console_input = console_input
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.access_token = access_token
+        self.refresh_token = refresh_token
+        self.code = code
+        self.redirect_url = redirect_url
+
+        if not self._can_perform_authenticated_requests():
+            raise ExceptionRDStationClient(MSG_AUTH_CONFIG + '\n' + MSG_ERROR)
+
+    def _can_perform_authenticated_requests(self):
+        if self.file_auth:
+            return True
+        elif self.client_id and self.client_secret \
+                and (self.refresh_token or self.code):
+            return True
+        else:
+            return False
 
     def _saving_params(self):
         f = open(self.file_auth, 'w')
@@ -92,7 +113,8 @@ class RDStationClient:
             self.access_token = 'access_token'
             self.refresh_token = 'refresh_token'
             self.redirect_url = 'https://appname.org/auth/callback'
-            self._saving_params()
+            if self.file_auth:
+                self._saving_params()
             raise ExceptionRDStationClient(MSG_ERROR)
 
     def _create_token(self, deep=False):
@@ -130,7 +152,8 @@ class RDStationClient:
         data = encode_all_unicode(_response.json())
         self.access_token = data['access_token']
         self.refresh_token = data['refresh_token']
-        self._saving_params()
+        if self.file_auth:
+            self._saving_params()
 
     def _get_headers(self):
         return {
@@ -384,18 +407,18 @@ class RDStationClient:
 
         return self._get(
             'platform/contacts/' + (
-                (
-                    'email:%s' % email if email else (
-                        'uuid:%s' % uuid
-                    )
-                ) + ('/funnels/%s' % funnel_name)
+                    (
+                        'email:%s' % email if email else (
+                                'uuid:%s' % uuid
+                        )
+                    ) + ('/funnels/%s' % funnel_name)
             )
         )
 
     def funnels_put(
-        self,
-        contact=None,
-        funnel_name="default"
+            self,
+            contact=None,
+            funnel_name="default"
     ):
         """
         Updates the funnel information about the current contact.
@@ -435,10 +458,10 @@ class RDStationClient:
 
         return self._put(
             'platform/contacts/' + (
-                (
-                    'email:%s' % email if email
-                    else ('uuid:%s' % uuid)
-                ) + ("/funnels/%s" % funnel_name)
+                    (
+                        'email:%s' % email if email
+                        else ('uuid:%s' % uuid)
+                    ) + ("/funnels/%s" % funnel_name)
             ),
             contact
         )
