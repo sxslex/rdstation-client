@@ -95,12 +95,14 @@ def test__get_json_response_200s(mock_api):
     except ExceptionRDStationClientResponse:
         pass
 
+
 def test_not_file_auth():
     try:
         RDStationClient()
         raise Exception('not expected')
     except ExceptionRDStationClient:
         pass
+
 
 def test_create_tokens_1():
     rdc = _create_rdc()
