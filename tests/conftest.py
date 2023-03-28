@@ -4,7 +4,7 @@ import requests_mock
 import pytest
 
 
-@pytest.yield_fixture()
+@pytest.fixture()
 def mock_api():
     with requests_mock.Mocker() as m:
         m.get(

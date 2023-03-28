@@ -21,19 +21,23 @@ def _create_rdc(file_auth='test_file_auth.json', console_input=False):
     return rdc
 
 
+def _create_rdc_from_params(**kwargs):
+    return RDStationClient(**kwargs)
+
+
 def test_exception_rdstation_client_response_1():
     obj = ExceptionRDStationClientResponse(json.dumps({
         'errors': {
             'api_identifier': [{
                 'error_message': 'a field with '
-                "'api_identifier' = "
-                "'cf_my_custom_field' already "
-                'exists',
+                                 "'api_identifier' = "
+                                 "'cf_my_custom_field' already "
+                                 'exists',
                 'error_type': 'TAKEN'}],
             'name': {'pt-BR': [{
                 'error_message': "a field with 'name' = 'Meu "
-                "campo customizado' already "
-                'exists',
+                                 "campo customizado' already "
+                                 'exists',
                 'error_type': 'TAKEN'
             }]}}
     }))
@@ -46,11 +50,11 @@ def test_exception_rdstation_client_response_1():
 def test_exception_rdstation_client_response_2():
     obj = ExceptionRDStationClientResponse(json.dumps({
         'errors': {
-                'error_message': 'a field with '
-                "'api_identifier' = "
-                "'cf_my_custom_field' already "
-                'exists',
-                'error_type': 'TAKEN'}
+            'error_message': 'a field with '
+                             "'api_identifier' = "
+                             "'cf_my_custom_field' already "
+                             'exists',
+            'error_type': 'TAKEN'}
     }))
     sobj = str(obj)
     assert 'ExceptionRDStationClientResponse(' in sobj
@@ -133,8 +137,73 @@ def test_create_tokens_3():  # mock_api
         print(':)')
 
 
-def test_encode_all_unicode():
+def test_create_rdc_can_auth_1():
+    rdc = _create_rdc_from_params(
+        file_auth='somefile',
+    )
+    assert isinstance(rdc, RDStationClient)
 
+
+def test_create_rdc_can_auth_2():
+    rdc = _create_rdc_from_params(
+        client_id='client_id',
+        client_secret='client_secret',
+        refresh_token='refresh_token'
+    )
+    assert isinstance(rdc, RDStationClient)
+
+
+def test_create_rdc_can_auth_3():
+    rdc = _create_rdc_from_params(
+        client_id='client_id',
+        client_secret='client_secret',
+        access_token='access_token',
+        refresh_token='refresh_token',
+    )
+    assert isinstance(rdc, RDStationClient)
+
+
+def test_create_rdc_can_auth_4():
+    rdc = _create_rdc_from_params(
+        client_id='client_id',
+        client_secret='client_secret',
+        access_token='access_token',
+        code='code',
+    )
+    assert isinstance(rdc, RDStationClient)
+
+
+def test_create_rdc_can_auth_5():
+    rdc = _create_rdc_from_params(
+        client_id='client_id',
+        client_secret='client_secret',
+        code='code',
+    )
+    assert isinstance(rdc, RDStationClient)
+
+
+def test_create_rdc_cannot_auth_1():
+    try:
+        _create_rdc_from_params(
+            client_id='client_id',
+            client_secret='client_secret',
+        )
+        raise Exception('not expected')
+    except ExceptionRDStationClient:
+        pass
+
+
+def test_create_rdc_cannot_auth_2():
+    try:
+        _create_rdc_from_params(
+            access_token='access_token'
+        )
+        raise Exception('not expected')
+    except ExceptionRDStationClient:
+        pass
+
+
+def test_encode_all_unicode():
     class FakeUnicode(object):
         @staticmethod
         def encode(encoding):
@@ -338,7 +407,6 @@ def test_funnels_put_by_uuid(mock_api):
         'contact_owner_email': ''
     })
     assert isinstance(resp, dict)
-
 
 # # @requests_mock.mock()
 # def test_contacts_patch(m):
